@@ -52,21 +52,6 @@ END//
 DELIMITER ;
 
 
--- Actualizar el peso de un animal existente
-DELIMITER //
-CREATE PROCEDURE spUpdateAnimalWeight(
-    IN p_anim_id INT,
-    IN p_weight DECIMAL)
-BEGIN
-    UPDATE tbl_animales
-    SET 
-        anim_peso = p_weight
-    WHERE anim_id = p_anim_id;
-END//
-DELIMITER ;
-
-
-
 -- Mostrar (seleccionar) todos los animales
 DELIMITER //
 CREATE PROCEDURE spSelectAnimals()
