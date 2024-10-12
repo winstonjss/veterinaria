@@ -2,7 +2,7 @@
 
 DELIMITER // 
 
-CREATE PROCEDURE insertTratamiento (
+CREATE PROCEDURE spInsertTratamiento (
     IN p_trat_nombre VARCHAR(80),
     IN p_trat_descripcion TEXT,
     IN p_trat_fecha_inicio DATE,
@@ -20,7 +20,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE updateTratamiento (
+CREATE PROCEDURE spUpdateTratamiento (
     IN p_trat_id INT,
     IN p_trat_nombre VARCHAR(80),
     IN p_trat_descripcion TEXT,
@@ -46,7 +46,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE deleteTratamiento (
+CREATE PROCEDURE spDeleteTratamiento (
     IN p_trat_id INT
 )
 BEGIN
@@ -58,7 +58,7 @@ DELIMITER ;
 -- CONSULTAR Tratamiento
 DELIMITER //
 
-CREATE PROCEDURE selectTratamiento (
+CREATE PROCEDURE spSelectTratamiento (
     IN p_trat_id INT
 )
 BEGIN
