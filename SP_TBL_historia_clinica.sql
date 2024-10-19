@@ -316,36 +316,3 @@ BEGIN
         
 END //
 DELIMITER ;
-
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spDeleteHistoriaClinica`(
-    IN p_histo_cli_id INT
-)
-BEGIN
-    DELETE FROM tbl_tipo_documento 
-    WHERE histo_cli_id = p_histo_cli_id;
-END //
-DELIMITER ;
-
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spDeleteHistoriaClinica`(
-    IN p_histo_cli_id INT
-)
-BEGIN
-    DELETE FROM tbl_historia_clinica 
-    WHERE histo_cli_id = p_histo_cli_id;
-END //
-DELIMITER ;
-
-DELIMITER //
-CREATE PROCEDURE spSelectHistoriaClinicaAnimal(
-    IN p_anim_id INT
-)
-BEGIN
-    SELECT hc.histo_cli_descripcion
-    FROM tbl_historia_clinica hc
-    INNER JOIN tbl_citas c ON hc.tbl_citas_cit_id = c.cit_id
-    INNER JOIN tbl_animales a ON c.tbl_animales_anim_id = a.anim_id
-    WHERE a.anim_id = p_anim_id;
-END //
-DELIMITER ;
