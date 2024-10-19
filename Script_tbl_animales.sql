@@ -73,6 +73,18 @@ END//
 DELIMITER ;
 
 
+-- Selecciona unicamente el id y el nombre de los animales 
+DELIMITER // 
+CREATE PROCEDURE spSelectAnimalsDDL() 
+BEGIN 
+	SELECT
+		anim_id, 
+		anim_nombre
+	FROM tbl_animales;
+END// 
+DELIMITER ; 
+
+
 -- Eliminar un animal
 DELIMITER //
 CREATE PROCEDURE spDeleteAnimals(
