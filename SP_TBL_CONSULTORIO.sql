@@ -49,3 +49,14 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-----------------------------------------------------SELECT DDL
+DELIMITER $$
+
+CREATE PROCEDURE spSelectOfficeDDL()
+BEGIN
+    SELECT con_num_consultorio
+    FROM tbl_consultorio;
+END $$
+
+DELIMITER ;
