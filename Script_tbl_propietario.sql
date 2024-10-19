@@ -48,6 +48,18 @@ END//
 DELIMITER ;
 
 
+-- Seleccionar unicamente el id y el nombre de los propietarios
+DELIMITER // 
+CREATE PROCEDURE spSelectOwnerDDL() 
+BEGIN 
+	SELECT
+		pro_id,
+		pro_nombre
+	FROM tbl_propietario;
+END// 
+DELIMITER ; 
+
+
 -- Eliminar un propietario
 DELIMITER //
 CREATE PROCEDURE spDeleteOwner(
