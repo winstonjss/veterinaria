@@ -6,7 +6,7 @@ CREATE PROCEDURE spInsertAnimals(
 	IN p_race VARCHAR(45),
 	IN p_date_birth DATE,
 	IN p_sex VARCHAR(45),
-	IN p_weight DECIMAL,
+	IN p_weight FLOAT,
 	IN p_color VARCHAR(30),
 	IN p_fkowner INT)
 BEGIN
@@ -33,7 +33,7 @@ CREATE PROCEDURE spUpdateAnimals(
 		IN p_race VARCHAR(45),
 		IN p_date_birth DATE,
 		IN p_sex VARCHAR(45),
-		IN p_weight DECIMAL,
+		IN p_weight FLOAT,
         IN p_color VARCHAR(30),
 		IN p_fkowner INT)
 BEGIN
