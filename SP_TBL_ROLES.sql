@@ -57,3 +57,12 @@ BEGIN
 END//
 DELIMITER ;
 
+
+--------------------------------------------SELECT DDL
+DELIMITER //
+CREATE PROCEDURE spSelectRolesDDL()
+BEGIN
+    SELECT rol_id, rol_nombre 
+    FROM tbl_rol;
+END//
+DELIMITER ;
