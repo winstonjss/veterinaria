@@ -56,6 +56,18 @@ END//
 DELIMITER ;
 
 
+-- Selecciona unicamente el id y el nombre de los veterinarios 
+DELIMITER // 
+CREATE PROCEDURE spSelectVeterinarianDDL() 
+BEGIN 
+	SELECT
+		vet_id, 
+		vet_nombre
+	FROM tbl_veterinario;
+END// 
+DELIMITER ;
+
+
 -- Eliminar un veterinario
 DELIMITER //
 CREATE PROCEDURE spDeleteVeterinarian(
