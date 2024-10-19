@@ -129,6 +129,7 @@ CREATE PROCEDURE spSelectCitasRangoFechas(
 )
 BEGIN
     SELECT 
+	c.cit_id,
         c.cit_fecha,
         c.cit_hora_inicio,
         c.cit_hora_fin,
@@ -153,6 +154,7 @@ CREATE PROCEDURE spSelectCitasVeterinarioRangoFechas(
 )
 BEGIN
     SELECT 
+	c.cit_id,
         c.cit_fecha,
         c.cit_hora_inicio,
         c.cit_hora_fin,
@@ -179,6 +181,7 @@ CREATE PROCEDURE spSelectCitasAnimalRangoFechas(
 )
 BEGIN
     SELECT 
+	c.cit_id,
         c.cit_fecha,
         c.cit_hora_inicio,
         c.cit_hora_fin,
@@ -192,4 +195,27 @@ BEGIN
     ORDER BY c.cit_fecha, c.cit_hora_inicio;
 END //
 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spSelectCitasAll(
+)
+BEGIN
+    
+        SELECT * FROM tbl_citas;
+        
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE spDeleteCita(
+    IN p_cit_id INT
+)
+BEGIN
+    DELETE FROM tbl_citas
+    WHERE  cit_id=p_cit_id;
+END //
 DELIMITER ;
