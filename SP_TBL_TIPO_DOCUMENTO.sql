@@ -55,3 +55,15 @@ BEGIN
     WHERE tip_doc_id = p_id;
 END//
 DELIMITER ;
+
+---------------------------------------SELECIONAR DDL
+DELIMITER //
+CREATE PROCEDURE spSelectDocumentTypeDDL(
+)
+BEGIN
+    SELECT  
+     tip_doc_descripcion 
+	 FROM tbl_tipo_documento;
+
+END//
+DELIMITER ;
