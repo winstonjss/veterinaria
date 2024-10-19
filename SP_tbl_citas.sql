@@ -219,3 +219,16 @@ BEGIN
     WHERE  cit_id=p_cit_id;
 END //
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE spSelectCitasDDL(    
+)
+BEGIN    
+    SELECT 
+		cit_id,
+        cit_fecha        
+        FROM tbl_citas;
+	END //
+
+DELIMITER ;
