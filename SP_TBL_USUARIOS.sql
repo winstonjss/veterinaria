@@ -90,3 +90,16 @@ BEGIN
     JOIN tbl_tipo_documento td ON u.tbl_tipo_documento_tip_doc_id = td.tip_doc_id;
 END//
 DELIMITER ;
+
+------------------------------------------------- SELECT DDL
+DELIMITER //
+CREATE PROCEDURE spSelectUserDDL()
+BEGIN
+    SELECT 
+        usu_id, 
+        usu_documento
+       
+    FROM tbl_usuarios;
+    
+END//
+DELIMITER ;
