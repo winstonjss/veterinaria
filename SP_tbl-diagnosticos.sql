@@ -69,3 +69,13 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE spSelectDiagnosisDLL()
+BEGIN
+    SELECT diag_clasificacion, diag_cod
+    FROM veterinaria.tbl_diagnosticos;
+END //
+
+DELIMITER ;
