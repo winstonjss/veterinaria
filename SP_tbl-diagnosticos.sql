@@ -1,81 +1,96 @@
------------------------------- INSERT
+-- Insertar un nuevo animal
 DELIMITER //
-
-CREATE PROCEDURE spInsertDiagnosis (
-    IN p_diag_clasificacion VARCHAR(255),
-    IN p_diag_cod VARCHAR(50),
-    IN p_tbl_anamnesis_anam_id INT
-)
+CREATE PROCEDURE spInsertAnimals(
+	IN p_name VARCHAR(45),
+	IN p_species VARCHAR(45),
+	IN p_race VARCHAR(45),
+	IN p_date_birth DATE,
+	IN p_sex VARCHAR(45),
+	IN p_weight FLOAT,
+	IN p_color VARCHAR(30),
+	IN p_fkowner INT)
 BEGIN
-    INSERT INTO veterinaria.tbl_diagnosticos (diag_clasificación, diag_cod, tbl_anamnesis_anam_id)
-    VALUES (p_diag_clasificacion, p_diag_cod, p_tbl_anamnesis_anam_id);
-END //
-
+	INSERT INTO tbl_animales(
+	anim_nombre, 
+	anim_especie, 
+	anim_raza, 
+	anim_fecha_nacimiento, 
+	anim_sexo, 
+	anim_peso,
+    anim_color,
+	tbl_propietario_pro_id)
+    VALUES(p_name, p_species, p_race, p_date_birth, p_sex, p_weight, p_color, p_fkowner);
+END//
 DELIMITER ;
 
------------------------------- UPDATE
+
+-- Actualizar un animal existente
 DELIMITER //
-
-CREATE PROCEDURE spUpdateDiagnosis (
-    IN p_diag_id INT,
-    IN p_diag_clasificacion VARCHAR(255),
-    IN p_diag_cod VARCHAR(50),
-    IN p_tbl_anamnesis_anam_id INT
-)
+CREATE PROCEDURE spUpdateAnimals(
+		IN p_anim_id INT,
+		IN p_name VARCHAR(45),
+		IN p_species VARCHAR(45),
+		IN p_race VARCHAR(45),
+		IN p_date_birth DATE,
+		IN p_sex VARCHAR(45),
+		IN p_weight FLOAT,
+        IN p_color VARCHAR(30),
+		IN p_fkowner INT)
 BEGIN
-    UPDATE veterinaria.tbl_diagnosticos
-    SET diag_clasificación = p_diag_clasificacion,
-        diag_cod = p_diag_cod,
-        tbl_anamnesis_anam_id = p_tbl_anamnesis_anam_id
-    WHERE diag_id = p_diag_id;
-END //
-
+	UPDATE tbl_animales
+    SET 
+		anim_nombre = p_name, 
+		anim_especie = p_species, 
+		anim_raza = p_race, 
+		anim_fecha_nacimiento = p_date_birth, 
+		anim_sexo = p_sex, 
+		anim_peso = p_weight,
+        anim_color = p_color,
+		tbl_propietario_pro_id = p_fkowner
+    WHERE anim_id = p_anim_id;
+END//
 DELIMITER ;
 
------------------------------- DELETE
+
+-- Mostrar (seleccionar) todos los animales
 DELIMITER //
-
-CREATE PROCEDURE spDeleteDiagnosis (
-    IN p_diag_id INT
-)
+CREATE PROCEDURE spSelectAnimals()
 BEGIN
-    DELETE FROM veterinaria.tbl_diagnosticos
-    WHERE diag_id = p_diag_id;
-END //
-
+	SELECT
+		anim_id,
+        anim_nombre, 
+		anim_especie, 
+		anim_raza, 
+		anim_fecha_nacimiento, 
+		anim_sexo, 
+		anim_peso,
+        anim_color,
+		tbl_propietario_pro_id, tbl_propietario.pro_nombre
+	FROM tbl_animales
+	INNER JOIN tbl_propietario
+	ON tbl_animales.tbl_propietario_pro_id = tbl_propietario.pro_id;
+END//
 DELIMITER ;
 
------------------------------- SELECT id
+
+-- Selecciona unicamente el id y el nombre de los animales 
+DELIMITER // 
+CREATE PROCEDURE spSelectAnimalsDDL() 
+BEGIN 
+	SELECT
+		anim_id, 
+		anim_nombre
+	FROM tbl_animales;
+END// 
+DELIMITER ; 
+
+
+-- Eliminar un animal
 DELIMITER //
-
-CREATE PROCEDURE spSelectDiagnosisId (
-    IN p_diag_id INT
-)
+CREATE PROCEDURE spDeleteAnimals(
+	IN p_anim_id INT)
 BEGIN
-    SELECT * FROM veterinaria.tbl_diagnosticos
-    WHERE diag_id = p_diag_id;
-END //
-
-DELIMITER ;
-
------------------------------- SELECT
-DELIMITER //
-
-CREATE PROCEDURE spSelectDiagnosis (
-    
-)
-BEGIN
-    SELECT * FROM veterinaria.tbl_diagnosticos;
-END //
-
-DELIMITER ;
-
-DELIMITER //
-
-CREATE PROCEDURE spSelectDiagnosisDLL()
-BEGIN
-    SELECT diag_clasificacion, diag_cod
-    FROM veterinaria.tbl_diagnosticos;
-END //
-
+	DELETE FROM tbl_animales 
+    WHERE anim_id = p_anim_id;
+END//
 DELIMITER ;
