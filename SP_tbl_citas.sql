@@ -1,120 +1,115 @@
 -- Insertar una cita
 DELIMITER //
-create procedure spInsertCita(
+
+CREATE PROCEDURE spInsertCita(
+    IN p_cit_fecha DATE,
+    IN p_cit_hora_inicio TIME,
+    IN p_cit_hora_fin TIME,
     IN p_animal_id INT,
-    IN p_veterinario_documento VARCHAR(15),
-    IN p_fecha DATE,
-    IN p_hora_inicio TIME,
-    IN p_hora_fin TIME
+    IN p_veterinario_id INT
 )
 BEGIN
-    DECLARE v_vet_id INT;
-    DECLARE v_horario_disponible INT;
-    DECLARE v_cita_existente INT;
+    -- Variables para validaciones
+    DECLARE citas_conflictivas INT;
+    DECLARE horario_valido INT;
 
-    -- Obtener el ID del veterinario a partir de su documento
-    SELECT vet_id INTO v_vet_id
-    FROM tbl_veterinario v
-    JOIN tbl_usuarios u ON v.tbl_usuarios_usu_id = u.usu_id
-    WHERE u.usu_documento = p_veterinario_documento;
-
-    IF v_vet_id IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Veterinario no encontrado';
-    END IF;
-
-    -- Verificar si el veterinario está disponible en el horario agendado
-    SELECT COUNT(*) INTO v_horario_disponible
+    -- Verificar si el veterinario tiene disponibilidad en la fecha y hora solicitada
+    SELECT COUNT(*)
+    INTO horario_valido
     FROM tbl_horarios_veterinario
-    WHERE tbl_veterinario_vet_id = v_vet_id
-    AND hor_vet_fecha = p_fecha
-    AND p_hora_inicio >= hor_vet_hora_inicio
-    AND p_hora_fin <= hor_vet_hora_final;
+    WHERE tbl_veterinario_vet_id = p_veterinario_id
+      AND p_cit_fecha BETWEEN hor_vet_fecha_inicio AND hor_vet_fecha_final
+      AND p_cit_hora_inicio >= hor_vet_hora_inicio
+      AND p_cit_hora_fin <= hor_vet_hora_final;
 
-    IF v_horario_disponible = 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El veterinario no está disponible en este horario';
+    -- Si el horario no es válido, devolver un error
+    IF horario_valido = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El veterinario no tiene disponibilidad en ese horario';
+    ELSE
+        -- Verificar si hay alguna cita en el mismo rango de fechas y horas
+        SELECT COUNT(*)
+        INTO citas_conflictivas
+        FROM tbl_citas
+        WHERE tbl_veterinario_vet_id = p_veterinario_id
+          AND cit_fecha = p_cit_fecha
+          AND (
+                (p_cit_hora_inicio BETWEEN cit_hora_inicio AND cit_hora_fin)
+             OR (p_cit_hora_fin BETWEEN cit_hora_inicio AND cit_hora_fin)
+             OR (cit_hora_inicio BETWEEN p_cit_hora_inicio AND p_cit_hora_fin)
+             OR (cit_hora_fin BETWEEN p_cit_hora_inicio AND p_cit_hora_fin)
+          );
+
+        -- Si no hay citas conflictivas, insertar la nueva cita
+        IF citas_conflictivas = 0 THEN
+            INSERT INTO tbl_citas (cit_fecha, cit_hora_inicio, cit_hora_fin, tbl_animales_anim_id, tbl_veterinario_vet_id)
+            VALUES (p_cit_fecha, p_cit_hora_inicio, p_cit_hora_fin, p_animal_id, p_veterinario_id);
+        ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El veterinario ya tiene una cita en ese rango de horas';
+        END IF;
     END IF;
-
-    -- Verificar si ya existe una cita agendada en el mismo horario
-    SELECT COUNT(*) INTO v_cita_existente
-    FROM tbl_citas
-    WHERE cit_fecha = p_fecha
-    AND tbl_veterinario_vet_id = v_vet_id
-    AND (p_hora_inicio BETWEEN cit_hora_inicio AND cit_hora_fin
-         OR p_hora_fin BETWEEN cit_hora_inicio AND cit_hora_fin
-         OR cit_hora_inicio BETWEEN p_hora_inicio AND p_hora_fin);
-
-    IF v_cita_existente > 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe una cita agendada en este horario';
-    END IF;
-
-    -- Insertar la cita
-    INSERT INTO tbl_citas (cit_fecha, cit_hora_inicio, cit_hora_fin, tbl_animales_anim_id, tbl_veterinario_vet_id)
-    VALUES (p_fecha, p_hora_inicio, p_hora_fin, p_animal_id, v_vet_id);
-
+    
 END //
+
 DELIMITER ;
+
 
 
 -- Editar cita
 DELIMITER //
 
 CREATE PROCEDURE spUpdateCita(
-    IN p_cita_id INT,
+    IN p_cit_id INT,
+    IN p_cit_fecha DATE,
+    IN p_cit_hora_inicio TIME,
+    IN p_cit_hora_fin TIME,
     IN p_animal_id INT,
-    IN p_veterinario_documento VARCHAR(15),
-    IN p_nueva_fecha DATE,
-    IN p_nueva_hora_inicio TIME,
-    IN p_nueva_hora_fin TIME
+    IN p_veterinario_id INT
 )
 BEGIN
-    DECLARE v_vet_id INT;
-    DECLARE v_horario_disponible INT;
-    DECLARE v_cita_existente INT;
+    -- Variables para validaciones
+    DECLARE citas_conflictivas INT;
+    DECLARE horario_valido INT;
 
-    -- Obtener el ID del veterinario a partir de su documento
-    SELECT vet_id INTO v_vet_id
-    FROM tbl_veterinario v
-    JOIN tbl_usuarios u ON v.tbl_usuarios_usu_id = u.usu_id
-    WHERE u.usu_documento = p_veterinario_documento;
-
-    IF v_vet_id IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Veterinario no encontrado';
-    END IF;
-
-    -- Verificar si el veterinario está disponible en el nuevo horario agendado
-    SELECT COUNT(*) INTO v_horario_disponible
+    -- Verificar si el veterinario tiene disponibilidad en la fecha y hora solicitada
+    SELECT COUNT(*)
+    INTO horario_valido
     FROM tbl_horarios_veterinario
-    WHERE tbl_veterinario_vet_id = v_vet_id
-    AND hor_vet_fecha = p_nueva_fecha
-    AND p_nueva_hora_inicio >= hor_vet_hora_inicio
-    AND p_nueva_hora_fin <= hor_vet_hora_final;
+    WHERE tbl_veterinario_vet_id = p_veterinario_id
+      AND p_cit_fecha BETWEEN hor_vet_fecha_inicio AND hor_vet_fecha_final
+      AND p_cit_hora_inicio >= hor_vet_hora_inicio
+      AND p_cit_hora_fin <= hor_vet_hora_final;
 
-    IF v_horario_disponible = 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El veterinario no está disponible en el nuevo horario';
+    -- Si el horario no es válido, devolver un error
+    IF horario_valido = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El veterinario no tiene disponibilidad en ese horario';
+    ELSE
+        -- Verificar si hay alguna cita en el mismo rango de fechas y horas (excluyendo la cita que se está actualizando)
+        SELECT COUNT(*)
+        INTO citas_conflictivas
+        FROM tbl_citas
+        WHERE tbl_veterinario_vet_id = p_veterinario_id
+          AND cit_fecha = p_cit_fecha
+          AND cit_id != p_cit_id -- Excluir la cita que se está actualizando
+          AND (
+                (p_cit_hora_inicio BETWEEN cit_hora_inicio AND cit_hora_fin)
+             OR (p_cit_hora_fin BETWEEN cit_hora_inicio AND cit_hora_fin)
+             OR (cit_hora_inicio BETWEEN p_cit_hora_inicio AND p_cit_hora_fin)
+             OR (cit_hora_fin BETWEEN p_cit_hora_inicio AND p_cit_hora_fin)
+          );
+
+        -- Si no hay citas conflictivas, actualizar la cita
+        IF citas_conflictivas = 0 THEN
+            UPDATE tbl_citas
+            SET cit_fecha = p_cit_fecha,
+                cit_hora_inicio = p_cit_hora_inicio,
+                cit_hora_fin = p_cit_hora_fin,
+                tbl_animales_anim_id = p_animal_id,
+                tbl_veterinario_vet_id = p_veterinario_id
+            WHERE cit_id = p_cit_id;
+        ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El veterinario ya tiene una cita en ese rango de horas';
+        END IF;
     END IF;
-
-    -- Verificar si ya existe una cita agendada en el nuevo horario
-    SELECT COUNT(*) INTO v_cita_existente
-    FROM tbl_citas
-    WHERE cit_fecha = p_nueva_fecha
-    AND tbl_veterinario_vet_id = v_vet_id
-    AND cit_id != p_cita_id  -- Excluir la cita actual
-    AND (p_nueva_hora_inicio BETWEEN cit_hora_inicio AND cit_hora_fin
-         OR p_nueva_hora_fin BETWEEN cit_hora_inicio AND cit_hora_fin
-         OR cit_hora_inicio BETWEEN p_nueva_hora_inicio AND p_nueva_hora_fin);
-
-    IF v_cita_existente > 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe una cita agendada en este nuevo horario';
-    END IF;
-
-    -- Actualizar la cita
-    UPDATE tbl_citas
-    SET cit_fecha = p_nueva_fecha,
-        cit_hora_inicio = p_nueva_hora_inicio,
-        cit_hora_fin = p_nueva_hora_fin,
-        tbl_animales_anim_id = p_animal_id,
-        tbl_veterinario_vet_id = v_vet_id
-    WHERE cit_id = p_cita_id;
 
 END //
 
