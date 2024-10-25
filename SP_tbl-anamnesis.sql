@@ -67,13 +67,3 @@ END //
 
 DELIMITER ;
 
-DELIMITER //
-
-CREATE PROCEDURE spSelectAnamnesisDDL()
-BEGIN
-    SELECT anam_id, anam_descripcion
-    FROM veterinaria.tbl_anamnesis;
-END //
-
-DELIMITER ;
-
