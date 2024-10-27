@@ -55,3 +55,12 @@ BEGIN
     WHERE per_id = p_id;
 END//
 DELIMITER ;
+
+--------------------------------------------SELECT DDL
+DELIMITER //
+CREATE PROCEDURE spSelectPermisosDDL()
+BEGIN
+    SELECT per_id, per_descripcion 
+    FROM tbl_permisos;
+END//
+DELIMITER ;
