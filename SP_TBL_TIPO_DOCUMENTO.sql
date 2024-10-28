@@ -62,7 +62,7 @@ CREATE PROCEDURE spSelectDocumentTypeDDL(
 )
 BEGIN
     SELECT  
-     tip_doc_descripcion 
+     tip_doc_id,tip_doc_descripcion 
 	 FROM tbl_tipo_documento;
 
 END//

@@ -55,7 +55,8 @@ DELIMITER $$
 
 CREATE PROCEDURE spSelectOfficeDDL()
 BEGIN
-    SELECT con_num_consultorio
+    SELECT 
+    con_id, con_num_consultorio
     FROM tbl_consultorio;
 END $$
 
