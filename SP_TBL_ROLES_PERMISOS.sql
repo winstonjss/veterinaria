@@ -63,3 +63,21 @@ BEGIN
     WHERE tbl_rol_rol_id = old_rol_id AND tbl_permisos_per_id = old_permiso_id;
 END//
 DELIMITER ;
+
+-----------------------------------------------------SELECT_ALL
+DELIMITER //
+CREATE PROCEDURE spSelectRoles_Permission()
+BEGIN
+    SELECT 
+		r.rol_id AS rol_id,
+        r.rol_nombre AS rol_nombre,
+        p.per_id AS per_id,
+        p.per_nombre AS per_nombre
+    FROM 
+        tbl_rol_has_tbl_permisos rp
+    INNER JOIN 
+        tbl_rol r ON rp.tbl_rol_rol_id = r.rol_id
+    INNER JOIN 
+        tbl_permisos p ON rp.tbl_permisos_per_id = p.per_id;
+END
+DELIMITER ;
