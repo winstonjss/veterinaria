@@ -58,9 +58,9 @@ DELIMITER ;
 
 --------------------------------------------SELECT DDL
 DELIMITER //
-CREATE PROCEDURE spSelectPermisosDDL()
+CREATE PROCEDURE spSelectPermissionDDL()
 BEGIN
-    SELECT per_id, per_descripcion 
+    SELECT per_id, per_nombre
     FROM tbl_permisos;
 END//
 DELIMITER ;
