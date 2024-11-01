@@ -58,6 +58,18 @@ END//
 DELIMITER ;
 
 
+-- Selecciona unicamente el id y la hora de inicio
+DELIMITER // 
+CREATE PROCEDURE spSelectVeterinaryHoursDDL() 
+BEGIN 
+	SELECT
+		hor_vet_id,
+		hor_vet_hora_inicio 
+	FROM tbl_horarios_veterinario;
+END// 
+DELIMITER ;
+
+
 -- Eliminar un horario de veterinario
 DELIMITER //
 CREATE PROCEDURE spDeleteVeterinaryHours(
