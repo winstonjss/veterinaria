@@ -69,3 +69,15 @@ BEGIN
 END //
 
 DELIMITER ;
+
+------------------------------ SELECT
+DELIMITER //
+
+CREATE PROCEDURE showDiagnosesDLL (
+    
+)
+BEGIN
+    SELECT diag_id, diag_clasificacion FROM veterinaria.tbl_diagnosticos;
+END //
+
+DELIMITER ;
