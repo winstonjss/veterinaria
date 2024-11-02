@@ -73,7 +73,7 @@ DELIMITER ;
 ------------------------------ SELECT
 DELIMITER //
 
-CREATE PROCEDURE showDiagnosesDLL (
+CREATE PROCEDURE spSelectDiagnosisDLL (
     
 )
 BEGIN
