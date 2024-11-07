@@ -73,13 +73,23 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE spSelectTreatment (
-    
-)
+CREATE PROCEDURE spSelectTreatment()
 BEGIN
-    SELECT * FROM veterinaria.tbl_tratamientos;
+    SELECT 
+        t.trat_id,
+        t.trat_nombre,
+        t.trat_descripcion,
+        t.trat_fecha_inicio,
+        t.trat_fecha_fin,
+        t.tbl_diagnosticos_diag_id,
+        d.diag_cod
+    FROM 
+        tbl_tratamientos AS t
+    JOIN 
+        tbl_diagnosticos AS d ON t.tbl_diagnosticos_diag_id = d.diag_id;
 END //
 
 DELIMITER ;
+
 
 
