@@ -216,14 +216,23 @@ END //
 DELIMITER ;
 
 DELIMITER //
-
-CREATE PROCEDURE spSelectCitasDDL(    
-)
-BEGIN    
+CREATE PROCEDURE spSelectCitasAll()
+BEGIN
     SELECT 
-		cit_id,
-        cit_fecha        
-        FROM tbl_citas;
-	END //
+        c.cit_id,
+        c.cit_fecha,
+        c.cit_hora_inicio,
+        c.cit_hora_fin,
+        c.tbl_animales_anim_id,
+        a.anim_nombre,
+        c.tbl_veterinario_vet_id,        
+        v.vet_nombre
+    FROM 
+        tbl_citas AS c
+    INNER JOIN 
+        tbl_animales AS a ON c.tbl_animales_anim_id = a.anim_id
+    INNER JOIN 
+        tbl_veterinario AS v ON c.tbl_veterinario_vet_id = v.vet_id;
+END //
 
 DELIMITER ;
