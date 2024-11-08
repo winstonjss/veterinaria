@@ -236,3 +236,26 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE spSelectCitasDDL()
+BEGIN    
+    SELECT 
+    c.cit_id,
+    CONCAT(
+		a.anim_nombre, ' ',
+        p.pro_nombre, ' ',
+        c.cit_fecha, ' ', 
+        c.cit_hora_inicio, ' ', 
+        c.cit_hora_fin, ' '			
+    ) AS detalle_cita 
+	FROM 
+		tbl_citas c
+	JOIN 
+		tbl_animales a ON c.tbl_animales_anim_id = a.anim_id
+	JOIN 
+		tbl_propietario p ON a.tbl_propietario_pro_id = p.pro_id;
+END //
+
+DELIMITER ;
+
