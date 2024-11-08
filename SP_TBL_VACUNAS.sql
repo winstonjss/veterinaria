@@ -72,12 +72,21 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE spSelectVaccine (
-    
-)
+CREATE PROCEDURE spSelectVaccine()
 BEGIN
-        SELECT * FROM veterinaria.tbl_vacunas;
+    SELECT 
+        v.vac_id,
+        v.vac_nombre,
+        v.vac_tipo,
+        v.vac_cantidad,
+        v.tbl_diagnosticos_diag_id,
+        d.diag_cod
+    FROM 
+        tbl_vacunas AS v
+    JOIN 
+        tbl_diagnosticos AS d ON v.tbl_diagnosticos_diag_id = d.diag_id;
 END //
 
 DELIMITER ;
+
 
