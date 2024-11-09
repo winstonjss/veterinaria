@@ -103,3 +103,31 @@ BEGIN
     
 END//
 DELIMITER ;
+
+-- Selecciona un usuario por su correo
+DELIMITER //
+CREATE PROCEDURE spSelectUserMail(IN p_mail VARCHAR(80))
+BEGIN
+    SELECT 
+        u.usu_id, 
+        u.usu_documento, 
+        u.usu_correo, 
+        u.usu_contrasena,
+        u.usu_salt,
+        u.usu_estado, 
+        u.usu_fecha_creacion, 
+        r.rol_nombre AS rol_nombre, 
+        p.per_nombre AS per_nombre,
+        td.tip_doc_descripcion AS tip_doc_descripcion
+        from tbl_usuarios u 
+    inner join tbl_rol r
+    on r.rol_id = u.tbl_rol_rol_id 
+    inner join tbl_rol_permiso
+    on r.rol_id = tbl_rol_permiso.tbl_rol_rol_id
+    inner join tbl_permisos p
+    on tbl_rol_permiso.tbl_permisos_per_id = p.per_id
+    inner JOIN tbl_tipo_documento td ON u.tbl_tipo_documento_tip_doc_id = td.tip_doc_id 
+	where usu_correo = p_mail;
+
+end//
+DELIMITER ;
