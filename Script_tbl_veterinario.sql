@@ -18,13 +18,12 @@ DELIMITER ;
 
 -- Actualizar un veterinario existente
 DELIMITER //
-DELIMITER //
 CREATE PROCEDURE spUpdateVeterinarian(
 	IN p_vet_id INT,
 	IN p_name VARCHAR(45),
 	IN p_phone VARCHAR(45),
 	IN p_fkusers INT,
-        IN p_fkoffice INT)
+	IN p_fkoffice INT)
 BEGIN
 	UPDATE tbl_veterinario
 	SET 
@@ -45,12 +44,12 @@ BEGIN
 		vet_id,
 		vet_nombre, 
 		vet_telefono, 
-		tbl_usuarios_usu_id, tbl_usuarios.usu_documento
-		tbl_consultorio_con_id, tbl_consultorio.con_num_consultario
+		tbl_usuarios_usu_id, tbl_usuarios.usu_documento,
+		tbl_consultorio_con_id, tbl_consultorio.con_num_consultorio
 	FROM tbl_veterinario
 	INNER JOIN tbl_usuarios
 	ON tbl_veterinario.tbl_usuarios_usu_id = tbl_usuarios.usu_id
-    	INNER JOIN tbl_consultorio
+	INNER JOIN tbl_consultorio
 	ON tbl_veterinario.tbl_consultorio_con_id = tbl_consultorio.con_id;
 END//
 DELIMITER ;
