@@ -81,6 +81,8 @@ BEGIN
         u.usu_id, 
         u.usu_documento, 
         u.usu_correo, 
+        u.usu_contrasena,
+        u.usu_salt,
         u.usu_estado, 
         u.usu_fecha_creacion, 
         r.rol_nombre AS rol_nombre, 
