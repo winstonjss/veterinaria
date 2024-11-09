@@ -192,17 +192,6 @@ END //
 
 DELIMITER ;
 
-DELIMITER //
-CREATE PROCEDURE spSelectCitasAll(
-)
-BEGIN
-    
-        SELECT * FROM tbl_citas;
-        
-END //
-
-DELIMITER ;
-
 
 DELIMITER //
 
