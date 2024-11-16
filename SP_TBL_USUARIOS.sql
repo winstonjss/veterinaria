@@ -110,7 +110,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE spSelectUserMail(IN p_mail VARCHAR(80))
 BEGIN
-    SELECT 
+     SELECT 
         u.usu_id, 
         u.usu_documento, 
         u.usu_correo, 
@@ -120,7 +120,11 @@ BEGIN
         u.usu_fecha_creacion, 
         r.rol_nombre AS rol_nombre, 
         p.per_nombre AS per_nombre,
-        td.tip_doc_descripcion AS tip_doc_descripcion
+        r.rol_id AS rol_id, 
+        r.rol_descripcion AS rol_descripcion,
+        td.tip_doc_descripcion AS tip_doc_descripcion,
+        p.per_id AS per_id,
+        p.per_descripcion AS per_descripcion
         from tbl_usuarios u 
     inner join tbl_rol r
     on r.rol_id = u.tbl_rol_rol_id 
