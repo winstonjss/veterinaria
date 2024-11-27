@@ -76,3 +76,13 @@ BEGIN
     WHERE vet_id = p_vet_id;
 END//
 DELIMITER ;
+
+
+-- Cuenta cuantos Veterinarios existen
+DELIMITER //
+CREATE PROCEDURE spSelectCountVeterinarian(OUT total_veterinarios INT)
+BEGIN
+    SELECT COUNT(vet_id) INTO total_veterinarios
+    FROM tbl_veterinario;
+END//
+DELIMITER ;

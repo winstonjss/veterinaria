@@ -69,3 +69,12 @@ BEGIN
     WHERE pro_id = p_pro_id;
 END//
 DELIMITER ;
+
+-- Cuenta cuantos Propietarios existen
+DELIMITER //
+CREATE PROCEDURE spSelectCountOwners(OUT total_propietarios INT)
+BEGIN
+    SELECT COUNT(pro_id) INTO total_propietarios
+    FROM tbl_propietario;
+END//
+DELIMITER ;
