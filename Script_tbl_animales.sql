@@ -94,3 +94,12 @@ BEGIN
     WHERE anim_id = p_anim_id;
 END//
 DELIMITER ;
+
+-- Cuenta cuantos Animales existen
+DELIMITER //
+CREATE PROCEDURE spSelectCountAnimals(OUT total_animales INT)
+BEGIN
+    SELECT COUNT(anim_id) INTO total_animales
+    FROM tbl_animales;
+END//
+DELIMITER ;

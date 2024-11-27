@@ -89,4 +89,23 @@ END //
 
 DELIMITER ;
 
+---------------------------para la gráfica de vacunas por diagnostico 
+DELIMITER //
+
+CREATE PROCEDURE sp_vacunas_por_diagnostico()
+BEGIN
+    SELECT 
+        v.vac_nombre AS nombre_vacuna,
+        d.diag_clasificacion AS diagnostico,
+        COUNT(DISTINCT v.vac_id) AS cantidad
+    FROM tbl_vacunas v
+    INNER JOIN tbl_diagnosticos d ON v.tbl_diagnosticos_diag_id = d.diag_id
+    GROUP BY v.vac_nombre, d.diag_clasificacion
+    ORDER BY cantidad DESC
+    LIMIT 10;
+END //
+
+DELIMITER ;
+
+
 

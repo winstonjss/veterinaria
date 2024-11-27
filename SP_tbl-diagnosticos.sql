@@ -81,3 +81,21 @@ BEGIN
 END //
 
 DELIMITER ;
+
+------------Para la gfráfica de total diagnosticos 
+
+DELIMITER $$
+CREATE PROCEDURE spGraficoLineasRecursosPorDiagnostico()
+BEGIN
+    SELECT 
+        IFNULL(DATE_FORMAT(t.trat_fecha_inicio, '%Y-%m'), 'Desconocido') AS Mes,
+        IFNULL(d.diag_clasificacion, 'Sin Clasificar') AS Diagnostico,
+        COUNT(t.trat_id) + COUNT(v.vac_id) AS TotalRecursos
+    FROM tbl_diagnosticos d
+    LEFT JOIN tbl_tratamientos t ON d.diag_id = t.tbl_diagnosticos_diag_id
+    LEFT JOIN tbl_vacunas v ON d.diag_id = v.tbl_diagnosticos_diag_id
+    WHERE t.trat_fecha_inicio IS NOT NULL OR v.vac_id IS NOT NULL
+    GROUP BY Mes, Diagnostico
+    ORDER BY Mes, Diagnostico;
+END$$
+DELIMITER ;

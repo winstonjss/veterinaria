@@ -248,3 +248,52 @@ END //
 
 DELIMITER ;
 
+-----------------Para la grafica de citas
+DELIMITER //
+CREATE PROCEDURE spCitasResumenMesActual4(
+    IN fecha_inicio DATE,
+    IN fecha_fin DATE,
+    IN fecha_actual DATE
+)
+BEGIN
+    -- Declarar las variables para almacenar los resultados
+    DECLARE total_citas_atendidas INT DEFAULT 0;
+    DECLARE total_citas_pendientes INT DEFAULT 0;
+    DECLARE mes_actual VARCHAR(7);
+
+    -- Obtener el mes actual en formato yyyy-mm
+    SET mes_actual = DATE_FORMAT(fecha_actual, '%Y-%m');
+
+    -- Total de citas atendidas entre fecha_inicio y fecha_actual
+    SELECT 
+        COUNT(*)
+    INTO 
+        total_citas_atendidas
+    FROM 
+        tbl_citas
+    WHERE 
+        cit_hora_fin IS NOT NULL
+        AND cit_fecha BETWEEN fecha_inicio AND fecha_actual;
+
+    -- Total de citas pendientes fuera del rango de fecha_inicio y fecha_actual
+    SELECT 
+        COUNT(*) 
+    INTO 
+        total_citas_pendientes
+    FROM 
+        tbl_citas
+    WHERE 
+        (cit_hora_fin IS NULL OR cit_fecha > fecha_actual)
+        AND cit_fecha BETWEEN fecha_inicio AND fecha_fin;
+
+    -- Aquí puedes devolver los resultados si es necesario
+    SELECT     
+        mes_actual AS 'MesActual',
+        total_citas_atendidas AS 'TotalCitasAtendidas', 
+        total_citas_pendientes AS 'TotalCitasPendientes';
+
+END//
+DELIMITER ;
+
+
+
